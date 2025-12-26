@@ -46,8 +46,6 @@ def render_page(response=None):
         <form method="get" action="/gen">
             <label>Region</label>
             <select name="region">{regions_options}</select>
-            <label>Name Prefix</label>
-            <input type="text" name="name" placeholder="ID NAME">
             <label>Account Count (1-15)</label>
             <input type="number" name="count" value="1" min="1" max="15">
             <input type="submit" value="Generate Guest ID">
@@ -89,7 +87,7 @@ def home():
 
 @app.route("/gen", methods=["GET"])
 def generate_accounts():
-    name = request.args.get("name", "HUSTLER")
+    # Name removed, only default used by API if needed
     count = request.args.get("count", "1")
     region = request.args.get("region", "IND").upper()
 
@@ -108,7 +106,7 @@ def generate_accounts():
     try:
         r = requests.get(
             API_URL + "gen",
-            params={"name": name, "count": count, "region": region},
+            params={"count": count, "region": region},
             timeout=30
         )
         r.raise_for_status()
