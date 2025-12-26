@@ -9,18 +9,15 @@ load_dotenv()
 
 app = Flask(__name__)
 
-# API URL and supported regions
 API_URL = os.getenv("API_URL", "https://wc-guest-gen.vercel.app/")
 TG_REGIONS = ["ME","IND","ID","VN","TH","BD","PK","TW","EU","RU","NA","SAC","BR"]
 
 @app.route("/", methods=["GET"])
 def home():
-    # Home page with form
     return render_template("index.html", response=None, regions=TG_REGIONS)
 
 @app.route("/gen", methods=["GET"])
 def generate_accounts():
-    # Get query parameters
     name = request.args.get("name", "HUSTLER")
     count = request.args.get("count", "1")
     region = request.args.get("region", "IND").upper()
@@ -40,7 +37,7 @@ def generate_accounts():
     # Call the API
     try:
         r = requests.get(
-            API_URL + "gen",  # Append endpoint
+            API_URL + "gen",
             params={"name": name, "count": count, "region": region},
             timeout=30
         )
@@ -52,7 +49,6 @@ def generate_accounts():
     except json.JSONDecodeError:
         pretty = "⚠️ API Response is not valid JSON."
 
-    # Render response in template
     return render_template("index.html", response=pretty, regions=TG_REGIONS)
 
 if __name__ == "__main__":
